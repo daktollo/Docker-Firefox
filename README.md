@@ -8,7 +8,7 @@ systemcil restart docker
 
 ## 1-Docker'da Ubuntu Kurulumu
 
-Öncelikle terminali açıp Ubuntu'yu indirelim.
+Terminali açıp Ubuntu'yu indirelim.
 
 ```python
 docker pull ubuntu:latest
