@@ -1,75 +1,59 @@
 ## Docker Firefox Kurulumu
 
 Öncelikle Docker servisini tekrar başlatalım
-'''bash
+
+```python
 systemcil restart docker
-'''
+```
 
 ## 1-Docker'da Ubuntu Kurulumu
 
-Öncelikle terminali açıp 
-
-Gym documentation website is at [https://www.gymlibrary.dev/](https://www.gymlibrary.dev/), and you can propose fixes and changes to it [here].
-
-Gym also has a discord server for development purposes that you can join here: https://discord.gg/nHg2JRN489
-
-## Installation
-
-To install the base Gym library, use `pip install gym`.
-
-This does not include dependencies for all families of environments (there's a massive number, and some can be problematic to install on certain systems). You can install these dependencies for one family like `pip install gym[atari]` or use `pip install gym[all]` to install all dependencies.
-
-We support Python 3.7, 3.8, 3.9 and 3.10 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
-
-## API
-
-The Gym API's API models environments as simple Python `env` classes. Creating environment instances and interacting with them is very simple- here's an example using the "CartPole-v1" environment:
+Öncelikle terminali açıp Ubuntu'yu indirelim.
 
 ```python
-import gym
-env = gym.make("CartPole-v1")
-observation, info = env.reset(seed=42)
-
-for _ in range(1000):
-    action = env.action_space.sample()
-    observation, reward, terminated, truncated, info = env.step(action)
-
-    if terminated or truncated:
-        observation, info = env.reset()
-env.close()
+docker pull ubuntu:latest
 ```
 
-## Notable Related Libraries
+## 2-Dockerfile oluşturalım
 
-asagıdaki commutları uygulayın
+Bir klasör oluşturun ve içinde aşağıdakileri içeren bir Dockerfile oluşturalım ve çalıştıralım.
 
-* once docker ileubuntu indirelim
-* [Tianshou](https://github.com/thu-ml/tianshou) is a learning library that's geared towards very experienced users and is design to allow for ease in complex algorithm modifications.
-* [RLlib](https://docs.ray.io/en/latest/rllib/index.html) is a learning library that allows for distributed training and inferencing and supports an extraordinarily large number of features throughout the reinforcement learning space.
-* [PettingZoo](https://github.com/Farama-Foundation/PettingZoo) is like Gym, but for environments with multiple agents.
+```python
+# We are going to use the Latest version of CentOS 7
+FROM centos:7
 
-## Environment Versioning
+# Install necessary packages including firefox and locales
+RUN yum update -y && \
+    yum install -y firefox dbus-x11 libcanberra-gtk2 glibc-locale-source
 
-Gym keeps strict versioning for reproducibility reasons. All environments end in a suffix like "\_v0".  When changes are made to environments that might impact learning results, the number is increased by one to prevent potential confusion.
+# Setting up the default locale to en_US.UTF-8
+RUN localedef --no-archive -i en_US -f UTF-8 en_US.UTF-8 && \
+    export LANG=en_US.UTF-8
 
-## MuJoCo Environments
+# Generating a universally unique ID for the Container
+RUN dbus-uuidgen > /etc/machine-id
 
-The latest "\_v4" and future versions of the MuJoCo environments will no longer depend on `mujoco-py`. Instead `mujoco` will be the required dependency for future gym MuJoCo environment versions. Old gym MuJoCo environment versions that depend on `mujoco-py` will still be kept but unmaintained.
-To install the dependencies for the latest gym MuJoCo environments use `pip install gym[mujoco]`. Dependencies for old MuJoCo environments can still be installed by `pip install gym[mujoco_py]`. 
-
-## Citation
-
-A whitepaper from when Gym just came out is available https://arxiv.org/pdf/1606.01540, and can be cited with the following bibtex entry:
+# Starting Firefox application
+CMD /usr/bin/firefox
 
 ```
-@misc{1606.01540,
-  Author = {Greg Brockman and Vicki Cheung and Ludwig Pettersson and Jonas Schneider and John Schulman and Jie Tang and Wojciech Zaremba},
-  Title = {OpenAI Gym},
-  Year = {2016},
-  Eprint = {arXiv:1606.01540},
-}
+
+```python
+docker build -t <image name> </path/to/your/Dockerfile>
 ```
 
-## Release Notes
 
-There used to be release notes for all the new Gym versions here. New release notes are being moved to [releases page](https://github.com/openai/gym/releases) on GitHub, like most other libraries do. Old notes can be viewed [here](https://github.com/openai/gym/blob/31be35ecd460f670f0c4b653a14c9996b7facc6c/README.rst).
+
+## 3- Gerekli izinleri verip çalıştıralım.
+
+```python
+xhost +
+```
+
+```python
+docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix <image name>
+```
+
+```python
+firefox
+```
