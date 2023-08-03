@@ -3,7 +3,7 @@
 Öncelikle Docker servisini tekrar başlatalım
 
 ```python
-systemcil restart docker
+systemctl restart docker
 ```
 
 ## 1-Docker'da Ubuntu Kurulumu
