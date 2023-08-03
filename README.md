@@ -8,10 +8,10 @@ systemctl restart docker
 
 ## 1-Docker'da Ubuntu Kurulumu
 
-Terminali açıp Ubuntu'yu indirelim.
+Terminali açıp Centos'u indirelim.
 
 ```python
-docker pull ubuntu:latest
+docker pull centos:7
 ```
 
 ## 2-Dockerfile oluşturalım
@@ -35,7 +35,6 @@ RUN dbus-uuidgen > /etc/machine-id
 
 # Starting Firefox application
 CMD /usr/bin/firefox
-
 ```
 
 ```python
