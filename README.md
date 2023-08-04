@@ -6,7 +6,7 @@
 systemctl restart docker
 ```
 
-## 1-Docker'da Ubuntu Kurulumu
+## 1-Docker'da Centos  Kurulumu
 
 Terminali açıp Centos'u indirelim.
 
